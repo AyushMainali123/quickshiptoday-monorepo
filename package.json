@@ -1,12 +1,19 @@
 {
   "private": true,
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
+    "build": "dotenv -- turbo run build",
+    "dev": "dotenv -- turbo dev",
     "lint": "turbo run lint",
+    "start": "turbo run start",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "dev:watch": "turbo run dev:watch --scope=\"@quickshiptoday/firebase-functions\"",
-    "logs": "turbo run logs"
+    "functions:watch": "turbo run dev:watch --scope=\"@quickshiptoday/firebase-functions\"",
+    "build:web": "turbo run build --scope=\"@quickshiptoday/web\"",
+    "dev:web": "firebase emulators:start && pnpm run functions:watch && turbo run dev --scope=\"@quickshiptoday/web\"",
+    "logs": "turbo run logs",
+    "firebase:emulators:start": "firebase emulators:start",
+    "firebase:deploy:firestore": "firebase deploy --only firestore",
+    "firebase:deploy:firestore-rules": "firebase deploy --only firestore:rules",
+    "firebase:deploy:firestore-indexes": "firebase deploy --only firestore:indexes"
   },
   "engines": {
     "node": ">=18.16.0"
@@ -15,9 +22,14 @@
     "@turbo/gen": "^1.9.7",
     "eslint": "^7.32.0",
     "eslint-config-custom": "workspace:*",
-    "prettier": "^2.5.1",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.2.3",
+    "prettier": "^3.0.1",
     "turbo": "latest"
   },
   "packageManager": "pnpm@8.6.10",
-  "name": "monorepo-test"
+  "name": "monorepo-test",
+  "dependencies": {
+    "dotenv-cli": "^7.2.1"
+  }
 }
