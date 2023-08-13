@@ -10,6 +10,10 @@
     "dev": {
       "cache": false,
       "persistent": true
-    }
+    },
+    "dev:watch": {},
+    "firebase:deploy:firestore-indexes": {},
+    "firebase:emulators:start": {},
+    "logs": {}
   }
 }

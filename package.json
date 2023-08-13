@@ -4,7 +4,12 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "dev:watch": "turbo run dev:watch --scope=\"@quickshiptoday/firebase-functions\"",
+    "logs": "turbo run logs"
+  },
+  "engines": {
+    "node": ">=18.16.0"
   },
   "devDependencies": {
     "@turbo/gen": "^1.9.7",
