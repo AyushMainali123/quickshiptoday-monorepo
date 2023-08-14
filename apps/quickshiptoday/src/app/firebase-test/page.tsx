@@ -1,7 +1,7 @@
 "use client";
 
 import { EmailAuthProvider, GoogleAuthProvider, User } from "firebase/auth";
-import { collection, doc, setDoc } from "firebase/firestore";
+import { collection, collectionGroup, doc, getDocs, query, setDoc, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { auth, db } from "../../../firebaseConfig";
@@ -25,13 +25,24 @@ export default function FirebaseTest() {
   };
   const [isSignedIn, setIsSignedIn] = useState(false); // Local signed-in state.
   const [user, setUser] = useState<User | null>(null);
-
+  const [adminUsers, setAdminUsers] = useState<any>([]);
   // Listen to the Firebase Auth state and set the local state.
   useEffect(() => {
     const unregisterAuthObserver = auth.onAuthStateChanged((loggedInUser) => {
+
+      const getAdminUsers = async () => {
+        const usersRef = collectionGroup(db, "user-info");
+        const q = query(usersRef, where("is_admin", "==", true));
+        const adminUsersRaw = await getDocs(q);
+        const adminUsersExact = adminUsersRaw.docs.map((doc) => {
+          return doc.data();
+        });
+        setAdminUsers(adminUsersExact);
+      }
       setIsSignedIn(!!loggedInUser);
       if (loggedInUser) {
-        setUser(loggedInUser);
+        setUser(loggedInUser)
+        getAdminUsers()
       }
     });
     return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
@@ -44,6 +55,7 @@ export default function FirebaseTest() {
         <p>Please sign-in:</p>
         <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
         <button onClick={handleClick}>Click Me</button>
+
       </div>
     );
   }
@@ -52,6 +64,7 @@ export default function FirebaseTest() {
       <h1>My App</h1>
       <p>Welcome {user?.displayName}! You are now signed-in!</p>
       <button onClick={() => auth.signOut()}>Sign-out</button>
+        {JSON.stringify(adminUsers)}
     </div>
   );
 }
