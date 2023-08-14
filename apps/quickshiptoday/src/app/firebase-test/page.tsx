@@ -26,23 +26,31 @@ export default function FirebaseTest() {
   const [isSignedIn, setIsSignedIn] = useState(false); // Local signed-in state.
   const [user, setUser] = useState<User | null>(null);
   const [adminUsers, setAdminUsers] = useState<any>([]);
+  const [nonAdminUsers, setnonAdminUsers] = useState<any>([]);
   // Listen to the Firebase Auth state and set the local state.
   useEffect(() => {
     const unregisterAuthObserver = auth.onAuthStateChanged((loggedInUser) => {
 
-      const getAdminUsers = async () => {
+      const getAdminUsers = async (isAdmin: boolean) => {
         const usersRef = collectionGroup(db, "user-info");
-        const q = query(usersRef, where("is_admin", "==", true));
+        const q = query(usersRef, where("is_admin", "==", isAdmin));
         const adminUsersRaw = await getDocs(q);
         const adminUsersExact = adminUsersRaw.docs.map((doc) => {
           return doc.data();
         });
-        setAdminUsers(adminUsersExact);
+        return adminUsersExact;
+      }
+
+      const populateAdmins = async () => {
+        const adminUsers = await getAdminUsers(true);
+        setAdminUsers(adminUsers);
+        const nonAdminUsers = await getAdminUsers(false);
+        setnonAdminUsers(nonAdminUsers);
       }
       setIsSignedIn(!!loggedInUser);
       if (loggedInUser) {
         setUser(loggedInUser)
-        getAdminUsers()
+        populateAdmins();
       }
     });
     return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
@@ -54,7 +62,7 @@ export default function FirebaseTest() {
         <h1>My App</h1>
         <p>Please sign-in:</p>
         <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
-        <button onClick={handleClick}>Click Me</button>
+        <button onClick={handleClick}  className="bg-pink-100 p-2 rounded-md">Click Me</button>
 
       </div>
     );
@@ -63,8 +71,9 @@ export default function FirebaseTest() {
     <div>
       <h1>My App</h1>
       <p>Welcome {user?.displayName}! You are now signed-in!</p>
-      <button onClick={() => auth.signOut()}>Sign-out</button>
+      <button onClick={() => auth.signOut()} className="bg-pink-100 p-2 rounded-md">Sign-out</button>
         {JSON.stringify(adminUsers)}
+        {JSON.stringify(nonAdminUsers)}
     </div>
   );
 }
