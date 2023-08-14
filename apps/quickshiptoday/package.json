@@ -1,5 +1,5 @@
 {
-  "name": "quickshiptoday",
+  "name": "@quickshiptoday/web",
   "version": "0.1.0",
   "private": true,
   "engines": {

@@ -2,10 +2,32 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "build": {
-      "env": [],
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
+    "deploy": {},
+    "@quickshiptoday/web#build": {
+      "env": [
+        "NEXT_PUBLIC_FIREBASE_EMULATOR_HOST",
+        "NEXT_PUBLIC_EMULATOR",
+        "NEXT_PUBLIC_FIRESTORE_EMULATOR_PORT",
+        "NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_PORT",
+        "NEXT_PUBLIC_FIREBASE_STORAGE_EMULATOR_PORT",
+        "NEXT_PUBLIC_FIREBASE_FUNCTIONS_EMULATOR_PORT",
+        "NEXT_PUBLIC_FIREBASE_PUBSUB_EMULATOR_PORT",
+        "NEXT_PUBLIC_FIREBASE_API_KEY",
+        "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN",
+        "NEXT_PUBLIC_FIREBASE_PROJECT_ID",
+        "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET",
+        "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID",
+        "NEXT_PUBLIC_FIREBASE_APP_ID",
+        "NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID"
+      ],
+      "dotEnv": [".env.local", ".env"],
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
+    "deploy#@quickshiptoday/firebase-functions": {},
     "lint": {},
     "dev": {
       "cache": false,
@@ -18,6 +40,23 @@
     "firebase:deploy:firestore-indexes": {},
     "firebase:emulators:start": {},
     "build:web": {
+      "env": [
+        "NEXT_PUBLIC_FIREBASE_EMULATOR_HOST",
+        "NEXT_PUBLIC_EMULATOR",
+        "NEXT_PUBLIC_FIRESTORE_EMULATOR_PORT",
+        "NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_PORT",
+        "NEXT_PUBLIC_FIREBASE_STORAGE_EMULATOR_PORT",
+        "NEXT_PUBLIC_FIREBASE_FUNCTIONS_EMULATOR_PORT",
+        "NEXT_PUBLIC_FIREBASE_PUBSUB_EMULATOR_PORT",
+        "NEXT_PUBLIC_FIREBASE_API_KEY",
+        "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN",
+        "NEXT_PUBLIC_FIREBASE_PROJECT_ID",
+        "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET",
+        "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID",
+        "NEXT_PUBLIC_FIREBASE_APP_ID",
+        "NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID"
+      ],
+      "dotEnv": [".env.local", ".env"],
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**"]
     },

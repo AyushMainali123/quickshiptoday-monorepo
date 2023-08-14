@@ -15,18 +15,6 @@ const https_1 = require("firebase-functions/v2/https");
 // https://firebase.google.com/docs/functions/typescript
 // import { app, initializeApp } from "firebase-admin";
 const initialize_firebase_admin_1 = require("./initialize-firebase-admin");
-initialize_firebase_admin_1.admin;
-// function initializeAdminApp() {
-//   let admin: app.App | null = null;
-//   return function () {
-//     if (!admin) {
-//       admin = initializeApp();
-//     }
-//     return admin;
-//   }
-// }
-// const adminApp = initializeAdminApp();
-// const admin = adminApp();
 exports.helloWorld = (0, https_1.onRequest)((request, response) => {
     console.log("HELLO WORLD", 5);
 });
